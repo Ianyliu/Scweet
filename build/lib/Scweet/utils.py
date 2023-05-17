@@ -29,44 +29,52 @@ def get_data(card, save_images=False, save_dir=None):
     image_links = []
 
     try:
-        username = card.find_element_by_xpath('.//span').text
+        username = card.find_element(
+            By.XPATH,'.//span').text
     except:
         return
 
     try:
-        handle = card.find_element_by_xpath('.//span[contains(text(), "@")]').text
+        handle = card.find_element(
+            By.XPATH,'.//span[contains(text(), "@")]').text
     except:
         return
 
     try:
-        postdate = card.find_element_by_xpath('.//time').get_attribute('datetime')
+        postdate = card.find_element(
+            By.XPATH,'.//time').get_attribute('datetime')
     except:
         return
 
     try:
-        text = card.find_element_by_xpath('.//div[2]/div[2]/div[1]').text
+        text = card.find_element(
+            By.XPATH,'.//div[2]/div[2]/div[1]').text
     except:
         text = ""
 
     try:
-        embedded = card.find_element_by_xpath('.//div[2]/div[2]/div[2]').text
+        embedded = card.find_element(
+            By.XPATH,'.//div[2]/div[2]/div[2]').text
     except:
         embedded = ""
 
     # text = comment + embedded
 
     try:
-        reply_cnt = card.find_element_by_xpath('.//div[@data-testid="reply"]').text
+        reply_cnt = card.find_element(
+            By.XPATH,'.//div[@data-testid="reply"]').text
     except:
         reply_cnt = 0
 
     try:
-        retweet_cnt = card.find_element_by_xpath('.//div[@data-testid="retweet"]').text
+        retweet_cnt = card.find_element(
+            By.XPATH,'.//div[@data-testid="retweet"]').text
     except:
         retweet_cnt = 0
 
     try:
-        like_cnt = card.find_element_by_xpath('.//div[@data-testid="like"]').text
+        like_cnt = card.find_element(
+            By.XPATH,'.//div[@data-testid="like"]').text
     except:
         like_cnt = 0
 
@@ -83,7 +91,8 @@ def get_data(card, save_images=False, save_dir=None):
     # handle promoted tweets
 
     try:
-        promoted = card.find_element_by_xpath('.//div[2]/div[2]/[last()]//span').text == "Promoted"
+        promoted = card.find_element(
+            By.XPATH,'.//div[2]/div[2]/[last()]//span').text == "Promoted"
     except:
         promoted = False
     if promoted:
@@ -107,7 +116,8 @@ def get_data(card, save_images=False, save_dir=None):
 
     # tweet url
     try:
-        element = card.find_element_by_xpath('.//a[contains(@href, "/status/")]')
+        element = card.find_element(
+            By.XPATH,'.//a[contains(@href, "/status/")]')
         tweet_url = element.get_attribute('href')
     except:
         return
@@ -235,7 +245,8 @@ def log_in(driver, env, timeout=20, wait=4):
     sleep(random.uniform(wait, wait + 1))
 
     # enter email
-    email_el = driver.find_element_by_xpath(email_xpath)
+    email_el = driver.find_element(
+            By.XPATH,email_xpath)
     sleep(random.uniform(wait, wait + 1))
     email_el.send_keys(email)
     sleep(random.uniform(wait, wait + 1))
@@ -243,14 +254,16 @@ def log_in(driver, env, timeout=20, wait=4):
     sleep(random.uniform(wait, wait + 1))
     # in case twitter spotted unusual login activity : enter your username
     if check_exists_by_xpath(username_xpath, driver):
-        username_el = driver.find_element_by_xpath(username_xpath)
+        username_el = driver.find_element(
+            By.XPATH,username_xpath)
         sleep(random.uniform(wait, wait + 1))
         username_el.send_keys(username)
         sleep(random.uniform(wait, wait + 1))
         username_el.send_keys(Keys.RETURN)
         sleep(random.uniform(wait, wait + 1))
     # enter password
-    password_el = driver.find_element_by_xpath(password_xpath)
+    password_el = driver.find_element(
+            By.XPATH,password_xpath)
     password_el.send_keys(password)
     sleep(random.uniform(wait, wait + 1))
     password_el.send_keys(Keys.RETURN)
@@ -349,12 +362,14 @@ def get_users_follow(users, headless, env, follow=None, verbose=1, wait=2, limit
         while scrolling and not is_limit:
             # get the card of following or followers
             # this is the primaryColumn attribute that contains both followings and followers
-            primaryColumn = driver.find_element_by_xpath('//div[contains(@data-testid,"primaryColumn")]')
+            primaryColumn = driver.find_element(
+            By.XPATH,'//div[contains(@data-testid,"primaryColumn")]')
             # extract only the Usercell
             page_cards = primaryColumn.find_elements_by_xpath('//div[contains(@data-testid,"UserCell")]')
             for card in page_cards:
                 # get the following or followers element
-                element = card.find_element_by_xpath('.//div[1]/div[1]/div[1]//a[1]')
+                element = card.find_element(
+            By.XPATH,'.//div[1]/div[1]/div[1]//a[1]')
                 follow_elem = element.get_attribute('href')
                 # append to the list
                 follow_id = str(follow_elem)
@@ -402,7 +417,8 @@ def check_exists_by_link_text(text, driver):
 def check_exists_by_xpath(xpath, driver):
     timeout = 3
     try:
-        driver.find_element_by_xpath(xpath)
+        driver.find_element(
+            By.XPATH,xpath)
     except NoSuchElementException:
         return False
     return True
