@@ -6,14 +6,14 @@ from time import sleep
 import random
 import pandas as pd
 
-from .utils import init_driver, get_last_date_from_csv, log_search_page, keep_scroling, dowload_images
+from .utils import init_driver, get_last_date_from_csv, log_search_page, keep_scroling, dowload_images, log_in
 
 
 
 def scrape(since, until=None, words=None, to_account=None, from_account=None, mention_account=None, interval=5, lang=None,
           headless=True, limit=float("inf"), display_type="Top", resume=False, proxy=None, hashtag=None, 
           show_images=False, save_images=False, save_dir="outputs", filter_replies=False, proximity=False, 
-          geocode=None, minreplies=None, minlikes=None, minretweets=None):
+          geocode=None, minreplies=None, minlikes=None, minretweets=None,env='.env'):
     """
     scrape data from twitter using requests, starting from <since> until <until>. The program make a search between each <since> and <until_local>
     until it reaches the <until> date if it's given, else it stops at the actual date.
@@ -69,6 +69,10 @@ def scrape(since, until=None, words=None, to_account=None, from_account=None, me
         show_images = True
     # initiate the driver
     driver = init_driver(headless, proxy, show_images)
+
+    #login to Twitter
+    log_in(driver,env=env)
+
     # resume scraping from previous work
     if resume:
         since = str(get_last_date_from_csv(path))[:10]
