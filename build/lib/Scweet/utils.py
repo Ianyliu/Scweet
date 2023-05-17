@@ -79,7 +79,8 @@ def get_data(card, save_images=False, save_dir=None):
         like_cnt = 0
 
     try:
-        elements = card.find_elements_by_xpath('.//div[2]/div[2]//img[contains(@src, "https://pbs.twimg.com/")]')
+        elements = card.find_elements(
+            By.XPATH,'.//div[2]/div[2]//img[contains(@src, "https://pbs.twimg.com/")]')
         for element in elements:
             image_links.append(element.get_attribute('src'))
     except:
@@ -100,7 +101,8 @@ def get_data(card, save_images=False, save_dir=None):
 
     # get a string of all emojis contained in the tweet
     try:
-        emoji_tags = card.find_elements_by_xpath('.//img[contains(@src, "emoji")]')
+        emoji_tags = card.find_elements(
+            By.XPATH,'.//img[contains(@src, "emoji")]')
     except:
         return
     emoji_list = []
@@ -283,7 +285,8 @@ def keep_scroling(driver, data, writer, tweet_ids, scrolling, tweet_parsed, limi
     while scrolling and tweet_parsed < limit:
         sleep(random.uniform(0.5, 1.5))
         # get the card of tweets
-        page_cards = driver.find_elements_by_xpath('//article[@data-testid="tweet"]')  # changed div by article
+        page_cards = driver.find_elements(
+            By.XPATH,'//article[@data-testid="tweet"]')  # changed div by article
         for card in page_cards:
             tweet = get_data(card, save_images, save_images_dir)
             if tweet:
@@ -365,7 +368,8 @@ def get_users_follow(users, headless, env, follow=None, verbose=1, wait=2, limit
             primaryColumn = driver.find_element(
             By.XPATH,'//div[contains(@data-testid,"primaryColumn")]')
             # extract only the Usercell
-            page_cards = primaryColumn.find_elements_by_xpath('//div[contains(@data-testid,"UserCell")]')
+            page_cards = primaryColumn.find_elements(
+            By.XPATH,'//div[contains(@data-testid,"UserCell")]')
             for card in page_cards:
                 # get the following or followers element
                 element = card.find_element(
